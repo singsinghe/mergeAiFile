@@ -137,7 +137,7 @@ function doDisplayDialog(){
                         startX = startX + (_gap*2.834645) + (_width*2.834645); 
 
                         if(startX+(_gap*2.834645) + (_width*2.834645) >docRef.width) {
-                            startY = startY - (_height*2.834645); 
+                            startY = startY - (_height*2.834645)-(_gap*2.834645); 
                             startX = 0;  
                         }
 
