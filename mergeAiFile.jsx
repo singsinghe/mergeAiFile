@@ -1,16 +1,43 @@
 /**
  * 이 프로그램은 여러개의 일러스트 및 pdf파일을 하나의 파일로 합치는 프로그램 입니다.
- * This program combines multiple illustrations and pdf files into one file.
+ * This program is combines multiple illustrations and pdf files into one file.
  * 개발 : 구명석, unidago.com 
  * 
  */
+ 
 
-  
+
+
+ 
 
 function doDisplayDialog(){
+
+  
+    progress = new Window("palette", "Progress", undefined, {
+        "closeButton": false
+    });
+    progress.t = progress.add("statictext");
+    progress.t.preferredSize.width = 450;
+    progress.b = progress.add("progressbar");
+    progress.b.preferredSize.width = 450;
+    progress.display = function (message) {
+        message && (this.t.text = message);
+        this.show();
+        this.update();
+    };
+    progress.increment = function () {
+        this.b.value++;
+    };
+    progress.set = function (steps) {
+        this.b.value = 0;
+        this.b.minvalue = 0;
+        this.b.maxvalue = steps;
+    }; 
  
+
     try {
          docRef = app.activeDocument;
+         app.userInteractionLevel = UserInteractionLevel.DONTDISPLAYALERTS; 
         
         
       } catch (e) {
@@ -91,9 +118,14 @@ function doDisplayDialog(){
 
                 var startY = -10; 
                 var startX = 10; 
+                
+
+                progress.display("Reading Files...");
+                progress.set(fileRef.length); 
 
                 for (var i = 0; i < fileRef.length; i++) {
  
+                   
                     
                   if ( app.documents.length > 0) {
 
@@ -114,13 +146,21 @@ function doDisplayDialog(){
                             startX = 10;  
                         }
 
-                        
+                        progress.increment();
+                        progress.display(File.decode(fileRef[i].name));
+
                     }
 
+                   
+                  
+
                 }
+
+              
  
             }
 
+          
             dialog.close(); 
 
         }
@@ -131,8 +171,11 @@ function doDisplayDialog(){
  
 }
 
+
  
 
-
 doDisplayDialog();
+
+
+
 
