@@ -5,37 +5,10 @@
  * 
  */
 
-
-/**
- * Gets the screen dimensions and bounds.
- * @returns {{left: *, top: *, right: *, bottom: *}}
- */
-function getScreenSize() {
-
-    try {
-        if (view = app.activeDocument.views[0] ) {
-            view.zoom = 1;
-            return {
-                left   : parseInt(view.bounds[0]),
-                top    : parseInt(view.bounds[1]), 
-                right  : parseInt(view.bounds[2]),
-                bottom : parseInt(view.bounds[3]),
-                width  : parseInt(view.bounds[2]) - parseInt(view.bounds[0]),
-                height : parseInt(view.bounds[1]) - parseInt(view.bounds[3])
-            };
-        }
-    }
-    catch(ex){/*Exit Gracefully*/}
-    return null;
-}
-
-
-
+  
 
 function doDisplayDialog(){
-
  
-
     try {
          docRef = app.activeDocument;
         
