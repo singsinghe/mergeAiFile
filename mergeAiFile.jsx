@@ -155,39 +155,10 @@ function doDisplayDialog(){
 
      dialog.show();
 
-
+ 
 }
 
-
-function logger(txt) {
-
-    
-    write_file("./log_000.txt", "[" + new Date().toUTCString() + "] " + txt, false);
-} 
-
-
-function write_file( path, txt, replace ) {
-    try {
-        var file = new File( path );
-        if (replace && file.exists) {
-            file.remove();
-            file = new File( path );
-        }
-        file.open("e", "TEXT", "????");
-        file.seek(0,2);
-        file.lineFeed = 'macintosh';
-        if (CONFIG.SYSTEM == 'WINDOWS') {
-            file.lineFeed = 'windows';
-        }
-        file.writeln(txt);
-        file.close();
-    }
-    catch(ex) {
-        try { file.close(); }
-        catch(ex) {/* Exit Gracefully*/}
-    }
-}
-
+ 
 
 
 doDisplayDialog();
