@@ -2,43 +2,15 @@
  * 이 프로그램은 여러개의 일러스트 및 pdf파일을 하나의 파일로 합치는 프로그램 입니다.
  * This program is combines multiple illustrations and pdf files into one file.
  * 개발 : 구명석, unidago.com 
- * 
  */
  
 
-
-
- 
-
 function doDisplayDialog(){
-
-  
-    progress = new Window("palette", "Progress", undefined, {
-        "closeButton": false
-    });
-    progress.t = progress.add("statictext");
-    progress.t.preferredSize.width = 450;
-    progress.b = progress.add("progressbar");
-    progress.b.preferredSize.width = 450;
-    progress.display = function (message) {
-        message && (this.t.text = message);
-        this.show();
-        this.update();
-    };
-    progress.increment = function () {
-        this.b.value++;
-    };
-    progress.set = function (steps) {
-        this.b.value = 0;
-        this.b.minvalue = 0;
-        this.b.maxvalue = steps;
-    }; 
- 
-
     try {
+
          docRef = app.activeDocument;
+         // 경고창이 뜨는것 무시 
          app.userInteractionLevel = UserInteractionLevel.DONTDISPLAYALERTS; 
-        
         
       } catch (e) {
         alert('활성화된 문서가 없습니다. 빈문서를 생성후 진행해주세요.');
@@ -47,13 +19,11 @@ function doDisplayDialog(){
 
  
     docRef.units = RulerUnits.Millimeters; 
-
  
     var dialog = new Window(
         "dialog", "파일 합치기" 
     );
  
-
  
         dialog.spacing = 4; 
 
@@ -120,19 +90,16 @@ function doDisplayDialog(){
                 var startX = 10; 
                 
 
-                progress.display("Reading Files...");
+                progress("Reading Files...");
                 progress.set(fileRef.length); 
 
                 for (var i = 0; i < fileRef.length; i++) {
  
-                   
                     
-                  if ( app.documents.length > 0) {
-
-                        doc = app.activeDocument;
-                        docWidth = doc.width; 
-                        var placedItem = doc.placedItems.add();
+                        var placedItem = docRef.placedItems.add();
                         placedItem.file = new File(fileRef[i]);
+                        progress.message(File.decode(fileRef[i].name));
+
                         placedItem.left = startX; 
                         //placedItem.artworkKnockout = true; 
                         placedItem.top = startY; 
@@ -147,15 +114,13 @@ function doDisplayDialog(){
                         }
 
                         progress.increment();
-                        progress.display(File.decode(fileRef[i].name));
-
-                    }
-
-                   
-                  
+                        app.redraw(); 
+                        
+                      
 
                 }
 
+                progress.close(); 
               
  
             }
@@ -172,10 +137,43 @@ function doDisplayDialog(){
 }
 
 
+
+
  
+
 
 doDisplayDialog();
 
 
-
+function progress(message) {
+    var b;
+    var t;
+    var w;
+    w = new Window("palette", "Progress", undefined, {
+        closeButton: false
+    });
+    t = w.add("statictext", undefined, message);
+    t.preferredSize = [450, -1];
+    b = w.add("progressbar");
+    b.preferredSize = [450, -1];
+    progress.close = function () {
+        w.close();
+    };
+    progress.increment = function () {
+        b.value++;
+        w.update(); 
+        $.sleep(50); 
+    };
+    progress.message = function (message) {
+        t.text = message;
+        w.update();
+    };
+    progress.set = function (steps) {
+        b.value = 0;
+        b.minvalue = 0;
+        b.maxvalue = steps;
+    };
+    w.show();
+    w.update();
+}
 
